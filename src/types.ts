@@ -3,6 +3,7 @@ export type Message = {
   author: string
   body: string
   at: string
+  createdAt?: string
   self?: boolean
 }
 

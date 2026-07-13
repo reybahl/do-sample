@@ -6,6 +6,7 @@ type SidebarProps = {
   activeId: string
   onSelect: (id: string) => void
   onCreate: (name: string) => void
+  disabled?: boolean
 }
 
 export function Sidebar({
@@ -13,6 +14,7 @@ export function Sidebar({
   activeId,
   onSelect,
   onCreate,
+  disabled = false,
 }: SidebarProps) {
   const [creating, setCreating] = useState(false)
   const [name, setName] = useState('')
@@ -23,6 +25,7 @@ export function Sidebar({
   }, [creating])
 
   function openCreate() {
+    if (disabled) return
     setCreating(true)
     setName('')
   }
@@ -44,12 +47,15 @@ export function Sidebar({
   return (
     <aside className="sidebar">
       <header className="sidebar-header">
-        <span className="sidebar-title">Rooms</span>
+        <span className="sidebar-title">
+          Rooms <span className="hmr-tag">HMR</span>
+        </span>
         <button
           type="button"
           className="btn btn-ghost"
           title="New room"
           onClick={openCreate}
+          disabled={disabled}
         >
           +
         </button>
@@ -73,7 +79,7 @@ export function Sidebar({
           <button
             type="submit"
             className="btn btn-primary room-create-submit"
-            disabled={!name.trim()}
+            disabled={disabled || !name.trim()}
           >
             Add
           </button>
@@ -83,7 +89,12 @@ export function Sidebar({
       {conversations.length === 0 && !creating ? (
         <div className="room-list-empty">
           <p>No rooms yet.</p>
-          <button type="button" className="btn" onClick={openCreate}>
+          <button
+            type="button"
+            className="btn"
+            onClick={openCreate}
+            disabled={disabled}
+          >
             New room
           </button>
         </div>
